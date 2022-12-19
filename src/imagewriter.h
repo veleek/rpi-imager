@@ -101,7 +101,7 @@ public:
     Q_INVOKABLE QString getTimezone();
     Q_INVOKABLE QStringList getTimezoneList();
     Q_INVOKABLE QStringList getCountryList();
-    Q_INVOKABLE QStringList getKeymapLayoutList();
+    Q_INVOKABLE QJsonArray getKeymapLayoutList();
     Q_INVOKABLE QString getSSID();
     Q_INVOKABLE QString getPSK(const QString &ssid);
 

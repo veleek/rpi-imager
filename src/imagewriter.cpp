@@ -847,19 +847,19 @@ QStringList ImageWriter::getCountryList()
     return countries;
 }
 
-QStringList ImageWriter::getKeymapLayoutList()
+QJsonArray ImageWriter::getKeymapLayoutList()
 {
-    QStringList keymaps;
-    QFile f(":/keymap-layouts.txt");
+    QJsonArray layouts;
+    QFile f(":/xorg-layouts.json");
     if ( f.open(f.ReadOnly) )
     {
-        keymaps = QString(f.readAll()).trimmed().split('\n');
+        QJsonDocument layoutsDoc = QJsonDocument::fromJson(f.readAll());
+        layouts = layoutsDoc.array();
         f.close();
     }
 
     return keymaps;
 }
-
 
 QString ImageWriter::getSSID()
 {

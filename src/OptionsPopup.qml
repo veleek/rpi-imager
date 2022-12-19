@@ -544,6 +544,28 @@ Popup {
                 }
             }
         }
+        if ('keyboardVariant' in settings) {
+            fieldKeyboardVariant.currentIndex = fieldKeyboardVariant.find(settings.keyboardVariant)
+            if (fieldKeyboardVariant.currentIndex == -1) {
+                fieldKeyboardVariant.editText = settings.keyboardVariant
+            }
+        } else {
+            if (imageWriter.isEmbeddedMode())
+            {
+                fieldKeyboardVariant.currentIndex = fieldKeyboardVariant.find(imageWriter.getCurrentKeyboard())
+            }
+            else
+            {
+                /* Lacking an easy cross-platform to fetch keyboard variant
+                   from host system, just default to "gb" for people in
+                   UK time zone for now, and "us" for everyone else */
+                if (tz == "Europe/London") {
+                    fieldKeyboardVariant.currentIndex = fieldKeyboardVariant.find("gb")
+                } else {
+                    fieldKeyboardVariant.currentIndex = fieldKeyboardVariant.find("us")
+                }
+            }
+        }
 
         if (imageWriter.isEmbeddedMode()) {
             /* For some reason there is no password mask character set by default on Embedded edition */
@@ -757,7 +779,7 @@ Popup {
         if (chkLocale.checked) {
             var kbdconfig = "XKBMODEL=\"pc105\"\n"
             kbdconfig += "XKBLAYOUT=\""+fieldKeyboardLayout.editText+"\"\n"
-            kbdconfig += "XKBVARIANT=\"\"\n"
+            kbdconfig += "XKBVARIANT=\""+fieldKeyboardVariant.editText+\"\n"
             kbdconfig += "XKBOPTIONS=\"\"\n"
 
             addFirstRun("if [ -f /usr/lib/raspberrypi-sys-mods/imager_custom ]; then")
@@ -828,6 +850,7 @@ Popup {
             if (chkLocale.checked) {
                 settings.timezone = fieldTimezone.editText
                 settings.keyboardLayout = fieldKeyboardLayout.editText
+                settings.keyboardVariant = fieldKeyboardVariant.editText
             }
 
             imageWriter.setSavedCustomizationSettings(settings)
